@@ -1,6 +1,32 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+//Her üyelik sistemi için bir AddAuthentication servisine þema adý verilir => JwtBearerDefaults.AuthenticationScheme default olarak jwt'den aldýk
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => {
+
+    options.Authority = "https://localhost:7193"; //AccessToken'ý daðýtan AuthServer'ýn ayaða kaldýrýldýðý port/domain
+    options.Audience = "resource_api1"; //AuthServer config class'ýnda API1 için resource yapýlandýrmasý
+
+ });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Read", policy =>
+    {
+        policy.RequireClaim("scope", "api1.read");
+    });
+
+    options.AddPolicy("UpdateOrCreateOrDelete", policy =>
+    {
+        policy.RequireClaim("scope",new[] { "api1.create" ,"api1.update" ,"api1.delete"});
+    });
+
+});
+    
+
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -17,7 +43,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
