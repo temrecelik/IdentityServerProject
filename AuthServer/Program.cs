@@ -4,6 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+//IdentityServer Yapýlandýrýýlmasý
 builder.Services.AddIdentityServer().AddInMemoryApiResources(Config.GetApiResource())
                 .AddInMemoryApiScopes(Config.GetApiScopes())
                 .AddInMemoryClients(Config.GetClients())

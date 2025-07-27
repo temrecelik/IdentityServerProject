@@ -13,9 +13,16 @@ namespace API1.Controllers
     {
         [Authorize(Policy = "Read")]
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult GetProducts()
         {
-            return Ok("Product controller'a erişim izniniz var");
+            List<GetProductDto>  products = new List<GetProductDto>() {
+
+                new GetProductDto(){name="ürün1" ,Category="Kozmetik" ,price=100},
+                new GetProductDto(){name="ürün1" ,Category="Temizlik" ,price=200},
+                new GetProductDto(){name="ürün1" ,Category="Oyuncak" , price=300},
+            };
+
+            return Ok(products);
         }
 
         [Authorize(Policy ="UpdateOrCreateOrDelete")]

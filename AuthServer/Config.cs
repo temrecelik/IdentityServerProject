@@ -11,11 +11,14 @@ namespace AuthServer
             {
                 new ApiResource("resource_api1")
                 {
-                    Scopes = { "api1.read" , "api1.write" , "api1.update" , "api1.delete" }
+                    Scopes = { "api1.read" , "api1.write" , "api1.update" , "api1.delete" },
+                    ApiSecrets = new[] {new Secret("secretapi1".Sha256())}
+                    
                 },
                 new ApiResource("resource_api2")
                 {
-                    Scopes = { "api2.read", "api2.write", "api2.update" , "api2.delete" }
+                    Scopes = { "api2.read", "api2.write", "api2.update" , "api2.delete" },
+                     ApiSecrets = new[] {new Secret("secretapi2".Sha256())}
                 },
             };
         }
@@ -45,7 +48,7 @@ namespace AuthServer
                {
                    ClientId ="Client1",
                    ClientName ="ClientName1",
-                   ClientSecrets = new[] { new Secret("secret".Sha256())},
+                   ClientSecrets = new[] { new Secret("secret1".Sha256())},
                    AllowedGrantTypes = GrantTypes.ClientCredentials, //üyelik içermeyen client'lar için
                    AllowedScopes = {"api1.read" , "api1.update","api2.write" , "api2.update" } //Bu client hangi izinle hangi Api'lere bağlanabilir.
 
@@ -55,7 +58,7 @@ namespace AuthServer
                {
                    ClientId ="Client2",
                    ClientName = "ClientName2",
-                   ClientSecrets = new[] { new Secret("secret".Sha256())},
+                   ClientSecrets = new[] { new Secret("secret2".Sha256())},
                    AllowedGrantTypes = GrantTypes.ClientCredentials,
                    AllowedScopes = {"api1.read" , "api2.write" , "api2.update" }
                },
