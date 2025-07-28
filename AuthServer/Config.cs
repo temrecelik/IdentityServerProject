@@ -1,4 +1,7 @@
-﻿using IdentityServer4.Models;
+﻿using Duende.IdentityServer.Models;
+using Duende.IdentityServer.Test;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace AuthServer
 {
@@ -62,7 +65,59 @@ namespace AuthServer
                    AllowedGrantTypes = GrantTypes.ClientCredentials,
                    AllowedScopes = {"api1.read" , "api2.write" , "api2.update" }
                },
+
+
+            };
+        }
+
+
+        //Üyelik sisteminde oluşan token'larda user için içerecek claim'ların yapılandırılması.
+        public static IEnumerable<IdentityResource> GetIdentityResources()
+        {
+            return new List<IdentityResource>() {
+            
+                //OpenId token'da user'ın id'sini tutan claim'ı tutar. Burada key'ler identity'den tanımlı keylerdir.
+                new IdentityResources.OpenId(),
+
+                //Profile kullanıcı ile ilgili bir çok claim tutar.
+                new IdentityResources.Profile()
+            };
+
+        }
+
+
+        public static IEnumerable<TestUser> GetUsers()
+        {
+            return new List<TestUser>()
+            {
+                new TestUser
+                {
+                    SubjectId = "1",
+                    Username ="Emre",
+                   
+                    Password="12345",
+                    Claims = new List<Claim>()
+                    {
+                        new Claim("given_name", "Emre"), //Key profile'da buluanan bir key
+                        new Claim("family_name", "Çelik") //key profile'da bulunan bir key 
+                    }
+
+
+                },
+                new TestUser
+                {
+                    SubjectId = "2",
+                    Username ="Mehmet",
+
+                    Password="54321",
+                    Claims = new List<Claim>()
+                    {
+                        new Claim("given_name", "Mehmet"), //Key profile'da buluanan bir key
+                        new Claim("family_name", "Demir") 
+                    }
+                },
             };
         }
     }
 }
+
